@@ -1,7 +1,6 @@
 import react, {useEffect, useState} from 'react';
 import { Router } from 'react-router-dom';
 import GlobalStyle from './styles/global';
-import {useSelector} from 'react-redux';
 
 import { createTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';

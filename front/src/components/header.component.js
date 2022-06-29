@@ -1,6 +1,5 @@
 import react from 'react';
 import { useHistory, Link, Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { useTheme } from '@material-ui/core/styles';
 
@@ -88,11 +87,7 @@ const Header = ({ open, handleDrawerOpen, handleDrawerClose }) => {
   const theme = useTheme();
   const userid = getUserIdInStorage();
 
-  const decode = useSelector(state => state.decode);
-  const accessibility = useSelector(state => state.accessibility);
-
   const handleLogout = async () => {
-
     try {
       await API.get(`/logout/${userid}`)
       resetStorage();
@@ -100,8 +95,6 @@ const Header = ({ open, handleDrawerOpen, handleDrawerClose }) => {
     } catch (error) {
       console.log(error)
     }
-
-
   }
 
   return (
@@ -154,68 +147,29 @@ const Header = ({ open, handleDrawerOpen, handleDrawerClose }) => {
         <div>
           <div className={classes.drawerHeader}>
             <CustonTitle>
-              <span className="main-text">EDUCA</span>
-              <span className="primary-text">LYTICS</span>
+              <span className="main-text">LABO</span>
+              <span className="primary-text">RAÇÃO</span>
             </CustonTitle>
             <IconButton onClick={handleDrawerClose} className="main-text">
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
           </div>
-          {/* <Divider /> */}
           <CustomList>
-            <CustomListItem button onClick={() => { history.push("/app/dashboard") }} accessibility={accessibility.nightMode}>
+            <CustomListItem button onClick={() => { history.push("/dashboard") }}>
               <ListItemIcon>
                 <PieChart />
               </ListItemIcon>
-              <ListItemText primary={"Dashboard"} />
+              <ListItemText primary={"Home"} />
             </CustomListItem>
-            {/* <CustomListItem className="main-text" button onClick={() => { history.push("/kanban") }}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Kanban"} />
-          </CustomListItem>
-          <CustomListItem className="main-text" button onClick={() => { history.push("/tasks") }}>
-            <ListItemIcon>
-              <ListAltIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Tarefas"} />
-          </CustomListItem>
-          <CustomListItem className="main-text" button onClick={() => { history.push("/categories") }}>
-            <ListItemIcon>
-              <LocalOfferIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Categorias"} />
-          </CustomListItem>
-          {decode.permission === "ROLE_ADMIN" && (
-            <CustomListItem className="main-text" button onClick={() => { history.push("/users") }}>
+
+            <CustomListItem button onClick={() => { history.push(`/settings`) }}>
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
-              <ListItemText primary={"Usuários"} />
-            </CustomListItem>
-          )} */}
-            <CustomListItem button onClick={() => { history.push(`/app/profile/edit`) }} accessibility={accessibility.nightMode}>
-              <ListItemIcon>
-                <GroupIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Perfil de usuário"} />
+              <ListItemText primary={"Configurações"} />
             </CustomListItem>
           </CustomList>
         </div>
-        <div className="mobile">
-          <StudentWrapper style={{ padding: '10px', background: COLORS.dark0, marginRight: '0px', alignItems: 'flex-start' }}>
-            <Typography className="primary-text mobile">
-              <b>
-                Aluno X
-              </b>
-            </Typography>
-            <Typography variant="subtitle2" className="main-text mobile">
-              alunox@alunox.com
-            </Typography>
-          </StudentWrapper>
-        </div>
-        {/* <Divider /> */}
       </CustomDrawer>
     </>
   )

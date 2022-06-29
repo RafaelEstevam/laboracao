@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { getTokenInStorage, decodeToken } from './services/api'
 
-// import Dashboard from './pages/Dashboard'
+import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 // import Kanban from './pages/Kanban'
 // import Task from './pages/Task'
@@ -34,7 +34,9 @@ const AdminRoutes = ({ component: Component, auth, ...attrs }) => {
 
 const PrivateRoute = ({ component: Component, auth, ...attrs }) => {
 
-  const token = getTokenInStorage();
+  // const token = getTokenInStorage();
+
+  const token = true;
 
   return token ? (
     <Route
@@ -46,7 +48,7 @@ const PrivateRoute = ({ component: Component, auth, ...attrs }) => {
       )}
     />
   ) : (
-    <Redirect to="/app/404" />
+    <Redirect to="/404" />
   )
 }
 
@@ -55,6 +57,8 @@ function AllRoutes() {
     <Switch>
       {/* <Route path="/dashboard" exact element={<Login />} /> */}
       <Route path="/" exact component={Login} />
+      {/* <Route path="/dashboard" exact component={Dashboard} /> */}
+      <PrivateRoute path="/dashboard" exact component={Dashboard} />
       {/* <Route exact path="/app/dashboard" component={Dashboard} /> */}
       {/* <PrivateRoute exact path="/app/dashboard" component={Dashboard} />
       <PrivateRoute exact path="/app/kanban" component={Kanban} />
