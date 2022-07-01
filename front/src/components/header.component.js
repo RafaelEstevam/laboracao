@@ -20,6 +20,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PieChart from '@material-ui/icons/PieChart';
+import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import GroupIcon from '@material-ui/icons/Group';
@@ -160,6 +161,13 @@ const Header = ({ open, handleDrawerOpen, handleDrawerClose }) => {
                 <PieChart />
               </ListItemIcon>
               <ListItemText primary={"Home"} />
+            </CustomListItem>
+
+            <CustomListItem button onClick={() => { history.push("/exercises") }}>
+              <ListItemIcon>
+                <DirectionsRunIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Exercícios"} />
             </CustomListItem>
 
             <CustomListItem button onClick={() => { history.push(`/settings`) }}>

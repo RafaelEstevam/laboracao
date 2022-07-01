@@ -4,13 +4,11 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { getTokenInStorage, decodeToken } from './services/api'
 
 import Dashboard from './pages/Dashboard'
+import Settings from './pages/Settings'
+import Exercises from './pages/Exercises'
+import Exercise from './pages/Exercise'
 import Login from './pages/Login'
-// import Kanban from './pages/Kanban'
-// import Task from './pages/Task'
-// import Profile from './pages/Profile'
-// import TaskList from './pages/TaskList'
-// import UserList from './pages/UserList'
-// import CategoriesList from './pages/CategoriesList'
+
 import DefaultLayout from './templates/default'
 
 const AdminRoutes = ({ component: Component, auth, ...attrs }) => {
@@ -59,6 +57,9 @@ function AllRoutes() {
       <Route path="/" exact component={Login} />
       {/* <Route path="/dashboard" exact component={Dashboard} /> */}
       <PrivateRoute path="/dashboard" exact component={Dashboard} />
+      <PrivateRoute path="/settings" exact component={Settings} />
+      <PrivateRoute path="/exercises" exact component={Exercises} />
+      <PrivateRoute path="/exercise/:id" exact component={Exercise} />
       {/* <Route exact path="/app/dashboard" component={Dashboard} /> */}
       {/* <PrivateRoute exact path="/app/dashboard" component={Dashboard} />
       <PrivateRoute exact path="/app/kanban" component={Kanban} />
