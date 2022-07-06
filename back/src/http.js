@@ -2,18 +2,8 @@ const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
 const socketIo = require('socket.io');
-// const fetch = require('node-fetch');
 const cors = require('cors');
 const routes = require('./routes');
-// const {AwesomeGraphQLClient} = require('awesome-graphql-client');
-
-// const client = new AwesomeGraphQLClient({
-//     endpoint:
-//         'https://api-sa-east-1.graphcms.com/v2/cl514trr41c2c01ugbhr85p1h/master',
-//     // fetch,
-// });
-
-// const interceptor = require('./utils/interceptor');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -25,7 +15,11 @@ const io = socketIo(server, {
   }
 });
 
-// mongoose.connect('mongodb+srv://tg:NxXEECNTK70X0a2O@tg.eftsh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://laboracao:VvvxrH1ZecXEEpUq@laboracao.o1i28.mongodb.net/laboracao?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+// mongoose.connect('mongodb://localhost:27017/laboracao', {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true
 // });
@@ -38,7 +32,6 @@ io.on("connection", (socket) => {
   }
   interval = setInterval(() => getApiAndEmit(socket), 1000);
   socket.on("disconnect", () => {
-    // console.log("Client disconnected");
     clearInterval(interval);
   });
 });

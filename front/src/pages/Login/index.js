@@ -9,6 +9,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
+import {API} from '../../services/api';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,10 +38,15 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
 
   const handleSubmit = async () => {
-    const data ={
-      email,
-      password
+    const data = {
+      email
     }
+
+    API.post('/login', data).then((response) => {
+      console.log(response);
+    }).catch((e) => {
+      console.log(e);
+    })
   }
 
   return (
@@ -66,20 +73,6 @@ export default function SignIn() {
             onChange={(e) => setEmail(e.target.value)}
             autoFocus
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />
-          
           <Button
             fullWidth
             variant="contained"

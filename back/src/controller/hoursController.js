@@ -3,24 +3,29 @@ const { request, gql } = require('graphql-request');
 
 const graphqlAPI = 'https://api-sa-east-1.graphcms.com/v2/cl514trr41c2c01ugbhr85p1h/master';
 
-const Historic = require("../schemas/historicService");
-
 const searchExercises = async () => {
     const query = gql`query MyQuery{
-        exercises {
+        grupoDeExercicio {
             id
-            title
-            time
-            description
-            repeatLimit
-            type
-            image {
-                url
+            tipo
+            nomeDoExercicio
+            repeticoesMaximas
+            exercises {
+                id
+                title
+                description
+                time
+                type
+                image {
+                    id
+                    url
+                }
             }
         }
     }`;
-    const exercises = await request(graphqlAPI, query);
-    return exercises;
+    
+    const {grupoDeExercicio} = await request(graphqlAPI, query);
+    return {exercises: grupoDeExercicio};
 }
 
 const isCurrentLessLimitHour = (current, limit) => {
@@ -47,10 +52,6 @@ const generateListExercises = (limit, list) => {
 }
 
 module.exports = {
-    async getHistorics(req, res) {
-        let historics = await Historic.find();
-        return res.json(historics);
-    },
 
     async generateHoursbyConfig(req, res) {
 
@@ -71,7 +72,6 @@ module.exports = {
             horaAtual: currentHours,
             horaLimite: limitHours,
             listHours
-            // eMenor: eMenor
         })
     },
 
@@ -81,12 +81,12 @@ module.exports = {
 
         const {exercises} = await searchExercises();
 
-        const exerciciosPescoco = exercises.filter((item) => item.type === 'pescoco');
-        const exerciciosOlhos = exercises.filter((item) => item.type === 'olhos');
-        const exerciciosMaos = exercises.filter((item) => item.type === 'maos');
-        const exerciciosPernas = exercises.filter((item) => item.type === 'pernasEpes');
-        const exerciciosBracos = exercises.filter((item) => item.type === 'braco');
-        const exerciciosColuna = exercises.filter((item) => item.type === 'coluna');
+        const exerciciosPescoco = exercises.filter((item) => item.tipo === 'pescoco');
+        const exerciciosOlhos = exercises.filter((item) => item.tipo === 'olhos');
+        const exerciciosMaos = exercises.filter((item) => item.tipo === 'maos');
+        const exerciciosPernas = exercises.filter((item) => item.tipo === 'pernasEpes');
+        const exerciciosBracos = exercises.filter((item) => item.tipo === 'braco');
+        const exerciciosColuna = exercises.filter((item) => item.tipo === 'coluna');
 
         let allExercises = [];
 
@@ -115,5 +115,6 @@ module.exports = {
         };
 
         return res.json({exercises: allExercises});
+        // return res.json(exercises);
     }
 }

@@ -1,51 +1,53 @@
 const User = require("../schemas/userService");
+const horusController = require("./hoursController");
 const Term = require("../schemas/termService");
-const interceptor = require("../utils/interceptor");
 
-module.exports = {
-    async post(req, res) {
-        const { email, password, name, doc, recieve_sms, recieve_email, show_sensitive_data, term_accept, term_accept_version, created_at, updated_at } = req.body;
-        let user = await User.findOne({ doc });
-        let currentTerm = await Term.findOne().sort({ term_version: -1 }).limit(1)
+const postUser = async (req, res) => {
+    const { email } = req.body;
+        
+        const created_at = new Date();
+        const updated_at = created_at;
+        const term_accept = false;
+
+        let user = await User.findOne({email});
 
         if (!user) {
             user = await User.create({
                 email,
-                password,
-                name,
-                doc,
-                recieve_sms,
-                recieve_email,
-                show_sensitive_data,
                 term_accept,
-                term_accept_version: term_accept ? currentTerm.term_version : null,
                 created_at,
                 updated_at
             });
 
-            interceptor(req, res, user);
-
             user.save();
             return res.json(user);
         } else {
-            return res.send("Usuário já cadastrado");
+            return res.status(400).send("Usuário já cadastrado");
         }
+}
+
+module.exports = {
+    async post(req, res) {
+        await postUser(req, res);
     },
 
     async put(req, res) {
 
-        const { email, password, name, doc, recieve_sms, recieve_email, show_sensitive_data, term_accept, term_accept_version } = req.body;
-        const { id } = req.params;
+        const {email, gl_List, exercises, term_accept} = req.body;
+        const {id} = req.params;
+        let exercises_created;
 
         let user = await User.findById(id);
 
+        if(exercises?.length > 0){
+            exercises_created = new Date();
+        }
+
         if (user) {
-
             const updated_at = new Date();
-            await User.updateOne({ id }, { email, password, name, doc, recieve_sms, recieve_email, show_sensitive_data, term_accept, term_accept_version, updated_at });
-            interceptor(req, res, user);
-
-            return res.send("Usuário alterado com sucesso");
+            await User.updateOne({ id }, { email, gl_List, exercises, exercises_created, term_accept, updated_at });
+            const updatedUser = await User.findOne({id});
+            return res.send(updatedUser);
         } else {
             return res.send("Usuário não encontrado");
         }
@@ -97,17 +99,14 @@ module.exports = {
     },
 
     async login(req, res) {
-        const { email, password } = req.body;
-
+        const {email} = req.body;
         let user = await User.findOne({ email });
-        if (user.email === email && user.password === password) {
-
+        if (user?.email === email) {
             const id = user?._id.valueOf();
-            user.password = "";
             await User.findByIdAndUpdate(id, { online: true })
             return res.status(200).json(user);
         } else {
-            return res.status(401).send("Usuário não encontrado");
+            await postUser(req, res);
         }
     },
 
@@ -133,15 +132,3 @@ module.exports = {
         }
     }
 }
-
-// {
-//     doc: {
-//         $cond: {
-//             if: {
-//                 $eq: ["$show_sensitive_data", true]
-//             },
-//             "then": "$doc",
-//             "else": "***"
-//         }
-//     }
-// }

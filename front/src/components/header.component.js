@@ -148,8 +148,8 @@ const Header = ({ open, handleDrawerOpen, handleDrawerClose }) => {
         <div>
           <div className={classes.drawerHeader}>
             <CustonTitle>
-              <span className="main-text">LABO</span>
-              <span className="primary-text">RAÇÃO</span>
+              <span className="main-text">LABOR</span>
+              <span className="primary-text">AÇÃO</span>
             </CustonTitle>
             <IconButton onClick={handleDrawerClose} className="main-text">
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
