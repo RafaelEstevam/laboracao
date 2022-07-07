@@ -8,7 +8,7 @@ const AchievementsModal = styled('div')`
     width: 100%;
     height: 100vh;
     position: fixed;
-    z-index: 1101;
+    z-index: 11000;
     top: 0px;
     left: 0px;
     background: rgba(0,0,0,0.5);
