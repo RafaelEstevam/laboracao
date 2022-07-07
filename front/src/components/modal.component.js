@@ -34,7 +34,7 @@ const ModalTitle = styled('div')`
 
 const ModalBody = styled('div')`
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     padding-bottom: 20px;
 `
 
@@ -48,18 +48,18 @@ const ModalActions = styled('div')`
     justify-content: flex-end;
 `
 
-const ModalComponent = ({show, setShow, onClick, buttonLabel}) => {
+const ModalComponent = ({show, setShow, onClick, buttonLabel, modalTitle, children}) => {
     return show && (
         <AchievementsModal>
             <AchievementsModalWrapper className='main-background'>
-                <ModalTitle>
-                    <ModalTitleLabel className="main-text">Termo de responsabilidade</ModalTitleLabel>
-                </ModalTitle>
-                <ModalBody>
-                    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px'}}>
-                        <Typography className='main-text'></Typography>
-                    </div>
-                </ModalBody>
+                <div>
+                    <ModalTitle>
+                        <ModalTitleLabel className="main-text">{modalTitle}</ModalTitleLabel>
+                    </ModalTitle>
+                    <ModalBody>
+                        {children}
+                    </ModalBody>
+                </div>
                 <ModalActions>
                     <Button color="primary" variant="contained" onClick={onClick}>
                         {buttonLabel}

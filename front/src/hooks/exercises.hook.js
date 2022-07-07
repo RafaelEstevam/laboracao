@@ -9,6 +9,8 @@ const ExercisesHook = () => {
     const [quantity, setQuantity] = useState('');
     const [exerciseList, setExerciseList] = useState([]);
     const [generatedExercises, setGeneratedExercises] = useState([]);
+    const [show, setShow] = useState(false);
+    const [userData, setUserData] = useState({});
 
     const translateExercise = (exercise) => {
         switch(exercise){
@@ -42,7 +44,11 @@ const ExercisesHook = () => {
     const handleDeleteExercise = (exercise) => {
         const filteredSettings = exerciseList.filter((item) => {return item.exercise !== exercise});
         setExerciseList([...filteredSettings]);
-    }
+    };
+
+    const handleCloseModal = () => {
+        setShow(false);
+    };
 
     const handleGenerateExercise = () =>{
         let data = {};
@@ -63,7 +69,8 @@ const ExercisesHook = () => {
 
         if(exercises?.length > 0){
             API.put(`/users/edit/${_id}`, {exercises: exercises}).then((response) => {
-                console.log(response.data);
+                setShow(true);
+                setUserData(response.data);
             }).catch((e) => {
                 console.log(e);
             });
@@ -81,7 +88,11 @@ const ExercisesHook = () => {
         handleChange,
         handleSubmit,
         handleDeleteExercise,
-        handleGenerateExercise
+        handleGenerateExercise,
+        show,
+        setShow,
+        handleCloseModal,
+        userData
     }
 };
 

@@ -2,9 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,20 +9,15 @@ import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import styled from 'styled-components';
 import { Divider, InputLabel, Select } from '@material-ui/core';
-
+import ExercisesModal from '../../components/exercisesModal.component';
 import {Close} from '@material-ui/icons';
 
 import ExercisesHook from '../../hooks/exercises.hook';
 
-const CustomRadioGroup = styled(RadioGroup)`
-    flex-direction: row;
-`;
 
 const CustomFormWrapper = styled('div')`
     display: flex;
@@ -65,7 +57,11 @@ export default function SignUp() {
     handleChange,
     handleSubmit,
     handleDeleteExercise,
-    handleGenerateExercise
+    handleGenerateExercise,
+    setShow,
+    show,
+    handleCloseModal,
+    userData
   } = ExercisesHook();
 
   return (
@@ -107,7 +103,7 @@ export default function SignUp() {
                             <Grid item xs={12} sm={12}>
                                 <CustomFormWrapper>
                                     <Typography variant='h6'>
-                                        Quantidade de exercícios:
+                                        Quantidade de grupo de exercícios:
                                     </Typography>
                                     <CustomFormWrapper>
                                         <TextField
@@ -150,15 +146,15 @@ export default function SignUp() {
                                         <CardContent>
                                             <Box display={'flex'} justifyContent="space-between">
                                                 <Typography>
-                                                    {translateExercise(item.exercise)}
+                                                    Tipo de exercício: <b>{translateExercise(item.exercise)}</b>
                                                 </Typography>
                                                 <Tooltip title="Quantidade de exercícios">
                                                     <Typography>
-                                                        {item.quantity}
+                                                        Quantidade: <b>{item.quantity}</b>
                                                     </Typography>
                                                 </Tooltip>
                                                 <Tooltip title="Remover exercício">
-                                                    <Button variant="contained" color="primary" onClick={() => handleDeleteExercise(item.exercise)}>
+                                                    <Button variant="outlined" onClick={() => handleDeleteExercise(item.exercise)}>
                                                         <Close/>
                                                     </Button>
                                                 </Tooltip>
@@ -183,6 +179,9 @@ export default function SignUp() {
                 </Grid>
             </form>
         </div>
+
+        <ExercisesModal {...{userData, setShow, show, handleCloseModal, buttonLabel: "Começar", modalTitle: "Lista de grupo exercícios gerados"}}/>
+
     </Container>
   );
 }

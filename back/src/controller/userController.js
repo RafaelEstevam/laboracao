@@ -35,19 +35,15 @@ module.exports = {
 
         const {email, gl_List, exercises, term_accept} = req.body;
 
-        const {id} = req.params;
+        const { id } = req.params;
         let exercises_created;
 
         let user = await User.findById(id);
 
-        if(exercises?.length > 0){
-            exercises_created = new Date();
-        }
-
         if (user) {
             const updated_at = new Date();
-            await User.updateOne({ id }, { email, gl_List, exercises, exercises_created, term_accept, updated_at });
-            const updatedUser = await User.findOne({id});
+            await User.findByIdAndUpdate(id, { email, gl_List, exercises, exercises_created, term_accept, updated_at });
+            const updatedUser = await User.findById(id);
             return res.send(updatedUser);
         } else {
             return res.send("Usuário não encontrado");

@@ -1,11 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {getUserDataInStorage, API, setUserDataInStorage} from '../services/api'
+import {getUserDataInStorage, API, setUserDataInStorage} from '../services/api';
+import {useHistory} from 'react-router-dom';
 
 const DashboardHook = () => {
 
+    const history = useHistory();
     const {term_accept, _id} = getUserDataInStorage();
     const [show, setShow] = useState(null);
+    const [termContent, setTermContent] = useState('');
+    const [showExercises, setShowExercises] = useState(null);
     const [term, setTerm] = useState(null);
+    const [userData, setUserData] = useState({});
 
     const handleAcceptTerm = async () => {
         const data = {term_accept: true};
@@ -16,7 +21,15 @@ const DashboardHook = () => {
         }).catch((e) => {
             console.log(e)
         })
-    }
+    };
+
+    const handleOpenExerciseModal = () => {
+        setShowExercises(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowExercises(false);
+    };
 
     useEffect(() => {
         setTerm(term_accept);
@@ -28,11 +41,28 @@ const DashboardHook = () => {
         }
     }, [term]);
 
+    useEffect(() => {
+        API.get(`/users/${_id}`).then((response) => {
+            setUserData(response.data);
+        }).catch((e) => {
+            console.log(e)
+        });
+    }, [_id]);
+
+
+
     return {
         _id,
         show,
         setShow,
-        handleAcceptTerm
+        handleAcceptTerm,
+        handleCloseModal,
+        userData,
+        handleOpenExerciseModal,
+        history,
+        showExercises,
+        setShowExercises,
+        termContent
     }
 };
 

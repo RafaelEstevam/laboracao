@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from "react";
-import DashboardHook from "./dashboard.hook";
-import { API } from "../services/api";
+import { API, getUserDataInStorage } from "../services/api";
 
 const SettingsHook = () => {
-    const {_id} = DashboardHook();
-
+    const {_id} = getUserDataInStorage();
     const [userData, setUserData] = useState('');
     const [value, setValue] = useState('dom');
     const [hora1, setHora1] = useState('');
@@ -57,29 +55,44 @@ const SettingsHook = () => {
     const handleEditUser = async (settingList) => {
         const data = {gl_List: settingList};
         await API.put(`/users/edit/${_id}`, data).then((response) => {
-            
+            setUserData(response.data);
         }).catch((e) => {
             console.log(e)
         })
     };
 
     const loadStateValues = (findedSettings) => {
-        console.log(findedSettings);
+        setHora1(findedSettings?.gl_start?.hour || '');
+        setHora2(findedSettings?.gl_middle?.hour || '');
+        setHora3(findedSettings?.gl_end?.hour || '');
+        setHora4(findedSettings?.water_config?.hour || '');
+        setMinuto1(findedSettings?.gl_start?.minute || '');
+        setMinuto2(findedSettings?.gl_middle?.minute || '');
+        setMinuto3(findedSettings?.gl_end?.minute || '');
+        setMinuto4(findedSettings?.water_config?.minute || '');
     }
   
     useEffect(() => {
-        if(settingList.length > 0){
+        if(settingList.length > 0 && userData.gl_List.length !== settingList.length){
             handleEditUser(settingList);
         }
-    }, [settingList]);
+    }, [settingList, userData]);
 
     useEffect(() => {
         API.get(`/users/${_id}`).then((response) => {
             setUserData(response.data);
+            setSettingList(response?.data?.gl_List);
         }).catch((e) => {
             console.log(e)
         })
     }, [_id]);
+
+    useEffect(() => {
+        const findedSettings = settingList?.gl_List?.find((item) => {
+            return item.day === value;
+        });
+        loadStateValues(findedSettings);
+    }, [value, settingList])
 
     useEffect(() => {
 
@@ -87,8 +100,7 @@ const SettingsHook = () => {
             return item.day === value;
         });
 
-        loadStateValues(findedSettings)
-
+        loadStateValues(findedSettings);
     }, [value, userData])
 
     return {
