@@ -63,7 +63,7 @@ const ExercisesHook = () => {
 
         if(exercises?.length > 0){
             API.put(`/users/edit/${_id}`, {exercises: exercises}).then((response) => {
-            
+                console.log(response.data);
             }).catch((e) => {
                 console.log(e);
             });

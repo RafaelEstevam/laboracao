@@ -5,6 +5,7 @@ import { API } from "../services/api";
 const SettingsHook = () => {
     const {_id} = DashboardHook();
 
+    const [userData, setUserData] = useState('');
     const [value, setValue] = useState('dom');
     const [hora1, setHora1] = useState('');
     const [hora2, setHora2] = useState('');
@@ -22,12 +23,25 @@ const SettingsHook = () => {
   
     const handleSubmit = async (e) => {
       e.preventDefault();
-  
+
       const data = {
           day: value,
-          gl_start: `${hora1}:${minuto1}`,
-          gl_middle: `${hora2}:${minuto2}`,
-          gl_end: `${hora3}:${minuto3}`
+          gl_start: {
+            hour: hora1,
+            minute: minuto1
+          },
+          gl_middle: {
+            hour: hora2,
+            minute: minuto2
+          },
+          gl_end: {
+            hour: hora3,
+            minute: minuto3
+          },
+          water_config: {
+            hour: hora4,
+            minute: minuto4
+          }
       }
   
       await API.post('/hours', {hour: hora4, minute: minuto4}).then((response) => {
@@ -43,15 +57,39 @@ const SettingsHook = () => {
     const handleEditUser = async (settingList) => {
         const data = {gl_List: settingList};
         await API.put(`/users/edit/${_id}`, data).then((response) => {
-            console.log(response.data);
+            
         }).catch((e) => {
             console.log(e)
         })
+    };
+
+    const loadStateValues = (findedSettings) => {
+        console.log(findedSettings);
     }
   
     useEffect(() => {
-        handleEditUser(settingList);
+        if(settingList.length > 0){
+            handleEditUser(settingList);
+        }
     }, [settingList]);
+
+    useEffect(() => {
+        API.get(`/users/${_id}`).then((response) => {
+            setUserData(response.data);
+        }).catch((e) => {
+            console.log(e)
+        })
+    }, [_id]);
+
+    useEffect(() => {
+
+        const findedSettings = userData?.gl_List?.find((item) => {
+            return item.day === value;
+        });
+
+        loadStateValues(findedSettings)
+
+    }, [value, userData])
 
     return {
         value,

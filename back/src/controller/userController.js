@@ -34,6 +34,7 @@ module.exports = {
     async put(req, res) {
 
         const {email, gl_List, exercises, term_accept} = req.body;
+
         const {id} = req.params;
         let exercises_created;
 
