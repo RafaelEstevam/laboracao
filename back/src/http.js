@@ -19,6 +19,7 @@ mongoose.connect('mongodb+srv://laboracao:VvvxrH1ZecXEEpUq@laboracao.o1i28.mongo
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+
 // mongoose.connect('mongodb://localhost:27017/laboracao', {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true

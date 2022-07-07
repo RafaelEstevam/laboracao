@@ -59,33 +59,9 @@ module.exports = {
         const { id } = req.params;
 
         const project_data = {
-            doc: {
-                $cond: {
-                    if: {
-                        $eq: ["$show_sensitive_data", true]
-                    },
-                    "then": "$doc",
-                    "else": "***"
-                }
-            },
-            name: {
-                $cond: {
-                    if: {
-                        $eq: ["$show_sensitive_data", true]
-                    },
-                    "then": "$name",
-                    "else": "***"
-                }
-            },
-            email: {
-                $cond: {
-                    if: {
-                        $eq: ["$show_sensitive_data", true]
-                    },
-                    "then": "$email",
-                    "else": "***"
-                }
-            }
+            gl_List: 1,
+            exercises: 1,
+            exercises_created: 1
         }
 
         let user = await User.findById(id, project_data);

@@ -90,9 +90,8 @@ const Header = ({ open, handleDrawerOpen, handleDrawerClose }) => {
 
   const handleLogout = async () => {
     try {
-      await API.get(`/logout/${userid}`)
       resetStorage();
-      history.push("/app");
+      history.push("/");
     } catch (error) {
       console.log(error)
     }

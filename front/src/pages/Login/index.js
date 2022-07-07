@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import {API} from '../../services/api';
+import LoginHook from '../../hooks/login.hook';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,34 +25,21 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(2, 0, 2),
   },
 }));
 
 export default function SignIn() {
   const classes = useStyles();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = async () => {
-    const data = {
-      email
-    }
-
-    API.post('/login', data).then((response) => {
-      console.log(response);
-    }).catch((e) => {
-      console.log(e);
-    })
-  }
+  const {email, setEmail, handleSubmit} = LoginHook();
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <form className={classes.paper} onSubmit={(e) => handleSubmit(e)}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -62,7 +49,6 @@ export default function SignIn() {
         <div className={classes.form}>
           <TextField
             variant="outlined"
-            margin="normal"
             required
             fullWidth
             id="email"
@@ -78,13 +64,13 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => handleSubmit()}
+            type="submit"
             id="loginButton"
           >
             Entrar
           </Button>
         </div>
-      </div>
+      </form>
     </Container>
   );
 }

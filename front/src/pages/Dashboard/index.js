@@ -1,8 +1,13 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Grid, Typography, Divider, Container} from '@material-ui/core';
 import CardComponent from "../../components/card.component";
+import Modal from "../../components/modal.component";
+import DashboardHook from "../../hooks/dashboard.hook";
 
 const Dashboard = () =>{
+
+    const {show, setShow, handleAcceptTerm} = DashboardHook();
+    
     return(
         <Container component="main" maxWidth="lg">
             <Typography component="h2" variant="h4" color="primary" gutterBottom>
@@ -21,7 +26,14 @@ const Dashboard = () =>{
                     </Grid>
                 </Grid>
             </Box>
-            
+            <Box pt={2}>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={12}>
+                        <CardComponent title="Série de exercícios" />
+                    </Grid>
+                </Grid>
+            </Box>
+            <Modal {...{setShow, show, onClick: handleAcceptTerm, buttonLabel: "Aceitar"}} />
         </Container>
     )
 }

@@ -1,10 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
+import Tooltip from '@material-ui/core/Tooltip';
+import CardContent from '@material-ui/core/CardContent';
+import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -14,6 +18,10 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import styled from 'styled-components';
 import { Divider, InputLabel, Select } from '@material-ui/core';
+
+import {Close} from '@material-ui/icons';
+
+import ExercisesHook from '../../hooks/exercises.hook';
 
 const CustomRadioGroup = styled(RadioGroup)`
     flex-direction: row;
@@ -48,16 +56,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-
-  const [value, setValue] = useState('dom');
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  }
+  
+  const {
+    quantity,
+    setQuantity,
+    exerciseList,
+    translateExercise,
+    handleChange,
+    handleSubmit,
+    handleDeleteExercise,
+    handleGenerateExercise
+  } = ExercisesHook();
 
   return (
     <Container component="main" maxWidth="lg">
@@ -83,54 +92,17 @@ export default function SignUp() {
                                         id: 'filled-age-native-simple',
                                     }}
                                     fullWidth
+                                    required
                                 >
                                     <option value={''}></option>
-                                    <option value={'pescoco'}>Pescoço</option>
-                                    <option value={'coluna'}>Coluna</option>
-                                    <option value={'mao'}>Mão</option>
-                                    <option value={'olhos'}>Olhos</option>
-                                    <option value={'pernas_e_pes'}>Pernas e pés</option>
-                                    <option value={'bracos'}>Braços</option>
+                                    <option value={'neck'}>Pescoço</option>
+                                    <option value={'spine'}>Coluna</option>
+                                    <option value={'hands'}>Mão</option>
+                                    <option value={'eyes'}>Olhos</option>
+                                    <option value={'legsAndFeet'}>Pernas e pés</option>
+                                    <option value={'arm'}>Braços</option>
                                 </Select>
                             </FormControl>
-                            </Grid>
-                            <Grid item xs={12} sm={12}>
-                                <CustomFormWrapper>
-                                    <Typography variant='h6'>
-                                        Número mínimo (repetições):
-                                    </Typography>
-                                    <CustomFormWrapper>
-                                        <TextField
-                                            variant="outlined"
-                                            required
-                                            type={'number'}
-                                            fullWidth
-                                            id="numeroMin"
-                                            size="small"
-                                            label="Mín."
-                                            name="numeroMin"
-                                        />
-                                    </CustomFormWrapper>
-                                </CustomFormWrapper>
-                            </Grid>
-                            <Grid item xs={12} sm={12}>
-                                <CustomFormWrapper>
-                                    <Typography variant='h6'>
-                                        Número máximo (repetições):
-                                    </Typography>
-                                    <CustomFormWrapper>
-                                        <TextField
-                                            variant="outlined"
-                                            required
-                                            type={'number'}
-                                            fullWidth
-                                            id="numeroMax"
-                                            size="small"
-                                            label="Max."
-                                            name="numeroMax"
-                                        />
-                                    </CustomFormWrapper>
-                                </CustomFormWrapper>
                             </Grid>
                             <Grid item xs={12} sm={12}>
                                 <CustomFormWrapper>
@@ -147,6 +119,8 @@ export default function SignUp() {
                                             size="small"
                                             label="Qtd."
                                             name="numeroQtd"
+                                            value={quantity}
+                                            onChange={(e) => setQuantity(e.target.value)}
                                         />
                                     </CustomFormWrapper>
                                 </CustomFormWrapper>
@@ -170,13 +144,37 @@ export default function SignUp() {
                             <Typography component="h2" variant="h4" color="primary" gutterBottom>
                                 Lista de exercícios
                             </Typography>
+                            {exerciseList?.map((item) => (
+                                <Box pt={2} key={item.exercise}>
+                                    <Card>
+                                        <CardContent>
+                                            <Box display={'flex'} justifyContent="space-between">
+                                                <Typography>
+                                                    {translateExercise(item.exercise)}
+                                                </Typography>
+                                                <Tooltip title="Quantidade de exercícios">
+                                                    <Typography>
+                                                        {item.quantity}
+                                                    </Typography>
+                                                </Tooltip>
+                                                <Tooltip title="Remover exercício">
+                                                    <Button variant="contained" color="primary" onClick={() => handleDeleteExercise(item.exercise)}>
+                                                        <Close/>
+                                                    </Button>
+                                                </Tooltip>
+                                            </Box>
+                                        </CardContent>
+                                    </Card>
+                                </Box>
+                            ))}
                             <br/>
                             <Divider />
                             <Button
-                                type="submit"
                                 variant="contained"
                                 color="primary"
                                 className={classes.submit}
+                                onClick={() => handleGenerateExercise()}
+                                disabled={!exerciseList.length > 0}
                             >
                                 Gerar exercícios
                             </Button>

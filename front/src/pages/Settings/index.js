@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -14,6 +14,8 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import styled from 'styled-components';
 import { Divider } from '@material-ui/core';
+
+import SettingsHook from '../../hooks/settings.hook';
 
 const CustomRadioGroup = styled(RadioGroup)`
     flex-direction: row;
@@ -48,16 +50,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-
-  const [value, setValue] = useState('dom');
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  }
+  const {
+    value,
+    hora1,
+    setHora1,
+    hora2,
+    setHora2,
+    hora3,
+    setHora3,
+    hora4,
+    setHora4,
+    minuto1,
+    setMinuto1,
+    minuto2,
+    setMinuto2,
+    minuto3,
+    setMinuto3,
+    minuto4,
+    setMinuto4,
+    handleSubmit,
+    handleChange
+  } = SettingsHook();
 
   return (
     <Container component="main" maxWidth="lg">
@@ -96,6 +109,8 @@ export default function SignUp() {
                                     label="Hora"
                                     name="hora1"
                                     autoComplete="lname"
+                                    value={hora1}
+                                    onChange={(e) => setHora1(e.target.value)}
                                 />
                                 <p>:</p>
                                 <TextField
@@ -107,6 +122,8 @@ export default function SignUp() {
                                     label="Minuto"
                                     name="minuto1"
                                     autoComplete="lname"
+                                    value={minuto1}
+                                    onChange={(e) => setMinuto1(e.target.value)}
                                 />
                             </CustomFormWrapper>
                         </CustomFormWrapper>
@@ -127,6 +144,9 @@ export default function SignUp() {
                                     label="Hora"
                                     name="hora2"
                                     autoComplete="lname"
+                                    value={hora2}
+                                    onChange={(e) => setHora2(e.target.value)}
+
                                 />
                                 <p>:</p>
                                 <TextField
@@ -138,6 +158,9 @@ export default function SignUp() {
                                     label="Minuto"
                                     name="minuto2"
                                     autoComplete="lname"
+                                    value={minuto2}
+                                    onChange={(e) => setMinuto2(e.target.value)}
+
                                 />
                             </CustomFormWrapper>
                         </CustomFormWrapper>
@@ -158,6 +181,9 @@ export default function SignUp() {
                                     label="Hora"
                                     name="hora3"
                                     autoComplete="lname"
+                                    value={hora3}
+                                    onChange={(e) => setHora3(e.target.value)}
+
                                 />
                                 <p>:</p>
                                 <TextField
@@ -169,6 +195,9 @@ export default function SignUp() {
                                     label="Minuto"
                                     name="minuto3"
                                     autoComplete="lname"
+                                    value={minuto3}
+                                    onChange={(e) => setMinuto3(e.target.value)}
+
                                 />
                             </CustomFormWrapper>
                         </CustomFormWrapper>
@@ -189,6 +218,9 @@ export default function SignUp() {
                                     label="Hora"
                                     name="hora4"
                                     autoComplete="lname"
+                                    value={hora4}
+                                    onChange={(e) => setHora4(e.target.value)}
+
                                 />
                                 <p>:</p>
                                 <TextField
@@ -200,6 +232,9 @@ export default function SignUp() {
                                     label="Minuto"
                                     name="minuto4"
                                     autoComplete="lname"
+                                    value={minuto4}
+                                    onChange={(e) => setMinuto4(e.target.value)}
+
                                 />
                             </CustomFormWrapper>
                         </CustomFormWrapper>
