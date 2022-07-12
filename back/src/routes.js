@@ -13,8 +13,11 @@ routes.post('/login', userController.login);
 routes.post('/users/new', userController.post);
 routes.put('/users/edit/:id', userController.put);
 routes.get('/users/:id', userController.get);
+routes.get('/users/:id/exercises', userController.getExercisesbyUserId);
+routes.get('/users/:id/exercises/:exercise_id', userController.getExercisebyExerciseId);
 
 routes.post('/hours', hoursController.generateHoursbyConfig);
 routes.post('/exercises', hoursController.generateExercises);
+routes.get('/cheats', hoursController.getCheats);
 
 module.exports = routes;

@@ -2,9 +2,10 @@ import React from 'react';
 import {Box, Card, CardContent, Typography} from '@material-ui/core';
 import Modal from './modal.component';
 
-const ExercisesModal = ({setShow, show, handleCloseModal, buttonLabel, modalTitle, userData}) => {
+const ExercisesModal = ({setShow, show, handleCloseModal, handleOpenExercise, buttonLabel, modalTitle, userData}) => {
+
     return (
-        <Modal {...{setShow, show, onClick: handleCloseModal, buttonLabel, modalTitle}}>
+        <Modal {...{setShow, show, onClick: handleOpenExercise, buttonLabel, modalTitle, onClose: handleCloseModal}}>
             {userData?.exercises?.map((item) => (
                 <Box pr={2} key={item.exercise}>
                     <Card>
@@ -13,9 +14,9 @@ const ExercisesModal = ({setShow, show, handleCloseModal, buttonLabel, modalTitl
                                 <Typography variant="h5">
                                     {item.nomeDoExercicio}
                                 </Typography>
-                                <Typography>
+                                {/* <Typography>
                                     Nº repetições: <b>{item.repeticoesMaximas}</b>
-                                </Typography>
+                                </Typography> */}
                             </Box>
                             <Box display={'flex'} style={{gap: '8px'}}>
                                 {item.exercises.map((subitem) => (
@@ -24,6 +25,9 @@ const ExercisesModal = ({setShow, show, handleCloseModal, buttonLabel, modalTitl
                                             <CardContent>
                                                 <Typography>
                                                     {subitem.title}
+                                                </Typography>
+                                                <Typography>
+                                                    Nº repetições: <b>{subitem.repeatLimit}</b>
                                                 </Typography>
                                             </CardContent>
                                         </Card>

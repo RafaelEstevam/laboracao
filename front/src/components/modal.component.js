@@ -15,6 +15,7 @@ const AchievementsModal = styled('div')`
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 `;
 
 const AchievementsModalWrapper = styled('div')`
@@ -45,10 +46,10 @@ const ModalTitleLabel = styled(Typography)`
 
 const ModalActions = styled('div')`
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 `
 
-const ModalComponent = ({show, setShow, onClick, buttonLabel, modalTitle, children}) => {
+const ModalComponent = ({show, setShow, onClick, buttonLabel, modalTitle, children, onClose}) => {
     return show && (
         <AchievementsModal>
             <AchievementsModalWrapper className='main-background'>
@@ -61,6 +62,11 @@ const ModalComponent = ({show, setShow, onClick, buttonLabel, modalTitle, childr
                     </ModalBody>
                 </div>
                 <ModalActions>
+                    {onClose && (
+                        <Button color="primary" variant="outlined" onClick={onClose}>
+                            Fechar
+                        </Button>
+                    )}
                     <Button color="primary" variant="contained" onClick={onClick}>
                         {buttonLabel}
                     </Button>

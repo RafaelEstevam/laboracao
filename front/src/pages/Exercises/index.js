@@ -17,7 +17,7 @@ import ExercisesModal from '../../components/exercisesModal.component';
 import {Close} from '@material-ui/icons';
 
 import ExercisesHook from '../../hooks/exercises.hook';
-
+import ExerciseHook from '../../hooks/exercise.hook';
 
 const CustomFormWrapper = styled('div')`
     display: flex;
@@ -63,6 +63,10 @@ export default function SignUp() {
     handleCloseModal,
     userData
   } = ExercisesHook();
+
+  const {
+    handleOpenExercise
+} = ExerciseHook();
 
   return (
     <Container component="main" maxWidth="lg">
@@ -180,7 +184,7 @@ export default function SignUp() {
             </form>
         </div>
 
-        <ExercisesModal {...{userData, setShow, show, handleCloseModal, buttonLabel: "Começar", modalTitle: "Lista de grupo exercícios gerados"}}/>
+        <ExercisesModal {...{userData, setShow, show, handleCloseModal,handleOpenExercise, buttonLabel: "Começar", modalTitle: "Lista de grupo exercícios gerados"}}/>
 
     </Container>
   );

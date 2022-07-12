@@ -4,8 +4,9 @@ import CardComponent from "../../components/card.component";
 import Modal from "../../components/modal.component";
 import ExercisesModal from '../../components/exercisesModal.component';
 import DashboardHook from "../../hooks/dashboard.hook";
+import ExerciseHook from "../../hooks/exercise.hook";
 
-const Dashboard = () =>{
+const Dashboard = () => {
 
     const {
         show,
@@ -19,6 +20,10 @@ const Dashboard = () =>{
         termContent,
         handleAcceptTerm
     } = DashboardHook();
+
+    const {
+        handleOpenExercise
+    } = ExerciseHook();
     
     return(
         <Container component="main" maxWidth="lg">
@@ -47,10 +52,12 @@ const Dashboard = () =>{
                     </Grid>
                 </Box>
             )}
+            
             <Modal {...{setShow, show, onClick: handleAcceptTerm, buttonLabel: "Aceitar", modalTitle: "Termo de responsabilidade"}}>
                 {termContent}
             </Modal>
-            <ExercisesModal {...{userData, setShow: setShowExercises, show: showExercises, handleCloseModal, buttonLabel: "Começar", modalTitle: "Lista de grupo exercícios"}}/>
+
+            <ExercisesModal {...{userData, setShow: setShowExercises, show: showExercises, handleCloseModal, handleOpenExercise, buttonLabel: "Começar", modalTitle: "Lista de grupo exercícios"}}/>
         </Container>
     )
 }

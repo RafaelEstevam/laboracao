@@ -3,19 +3,34 @@ const { request, gql } = require('graphql-request');
 
 const graphqlAPI = 'https://api-sa-east-1.graphcms.com/v2/cl514trr41c2c01ugbhr85p1h/master';
 
+const searchCheats = async () => {
+    const query = gql` query MyQuery{
+        dica {
+            id,
+            titulo,
+            textoDaDica{
+                html
+            }
+        }
+    }`;
+
+    const {dica} = await request(graphqlAPI, query);
+    return {cheats: dica};
+}
+
 const searchExercises = async () => {
     const query = gql`query MyQuery{
         grupoDeExercicio {
             id
             tipo
             nomeDoExercicio
-            repeticoesMaximas
             exercises {
                 id
                 title
                 description
                 time
                 type
+                repeatLimit
                 image {
                     id
                     url
@@ -116,5 +131,10 @@ module.exports = {
 
         return res.json({exercises: allExercises});
         // return res.json(exercises);
+    },
+
+    async getCheats(req, res) {
+        const {cheats} = await searchCheats();
+        return res.json({cheats});
     }
 }

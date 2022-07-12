@@ -71,6 +71,56 @@ module.exports = {
 
     },
 
+    async getExercisesbyUserId(req, res){
+        const { id } = req.params;
+
+        const project_data = {
+            exercises: 1,
+            exercises_created: 1
+        }
+
+        let user = await User.findById(id, project_data);
+        let exercisesList = [];
+
+        user?.exercises?.map((item) => {
+            item?.exercises.map((subitem) => {
+                exercisesList.push(subitem);
+            });
+        });
+
+        if (user) {
+            return res.json(exercisesList);
+        } else {
+            return res.send("Usuário não encontrado");
+        }
+    },
+
+    async getExercisebyExerciseId(req, res){
+        const { id, exercise_id } = req.params;
+
+        const project_data = {
+            exercises: 1,
+            exercises_created: 1
+        }
+
+        let user = await User.findById(id, project_data);
+        let exercisesList = [];
+
+        user?.exercises?.map((item) => {
+            item?.exercises.map((subitem) => {
+                exercisesList.push(subitem);
+            });
+        });
+
+        let exercise = exercisesList.find((item) => {return item.id == exercise_id});
+        
+        if (exercise) {
+            return res.json(exercise);
+        } else {
+            return res.send("Exercício não encontrado");
+        }
+    },
+
     async login(req, res) {
         const {email} = req.body;
         let user = await User.findOne({ email });
