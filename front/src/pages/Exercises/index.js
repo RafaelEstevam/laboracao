@@ -184,7 +184,7 @@ export default function SignUp() {
             </form>
         </div>
 
-        <ExercisesModal {...{userData, setShow, show, handleCloseModal,handleOpenExercise, buttonLabel: "Começar", modalTitle: "Lista de grupo exercícios gerados"}}/>
+        <ExercisesModal {...{userData, setShow, show, handleCloseModal,handleOpenExercise, buttonLabel: "Começar série", modalTitle: "Lista de grupo de exercícios gerados"}}/>
 
     </Container>
   );

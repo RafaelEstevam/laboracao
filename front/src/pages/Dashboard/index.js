@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Box, Grid, Typography, Divider, Container} from '@material-ui/core';
+import {Box, Grid, Typography, Divider, Container, Card, CardContent, Button} from '@material-ui/core';
 import CardComponent from "../../components/card.component";
 import Modal from "../../components/modal.component";
 import ExercisesModal from '../../components/exercisesModal.component';
@@ -18,7 +18,14 @@ const Dashboard = () => {
         handleOpenExerciseModal,
         history,
         termContent,
-        handleAcceptTerm
+        handleAcceptTerm,
+        showCheat,
+        setShowCheat,
+        showInformation,
+        setShowInformation,
+        informationContent,
+        cheatContent,
+        handleGetCheat
     } = DashboardHook();
 
     const {
@@ -33,13 +40,13 @@ const Dashboard = () => {
             <Box pt={2}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={4}>
-                        <CardComponent title="Exercícios" bg={3} ajust={'-40px'} {...{action: () => history.push('/exercises')}} />
+                        <CardComponent title="Exercícios" ajust={'30px'} bg={3} {...{action: () => history.push('/exercises')}} />
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <CardComponent title="Informações" bg={2} ajust={'-20px'}/>
+                        <CardComponent title="Informações" ajust={'120px'} bg={2} {...{action: () => setShowInformation(true)}}/>
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <CardComponent title="Dicas" bg={1} ajust={'-40px'}/>
+                        <CardComponent title="Dicas" ajust={'40px'} bg={1} {...{action: () => setShowCheat(true)}}/>
                     </Grid>
                 </Grid>
             </Box>
@@ -47,17 +54,55 @@ const Dashboard = () => {
                 <Box pt={3}>
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={12}>
-                            <CardComponent title="Ver série de exercícios" {...{action: handleOpenExerciseModal}} />
+                            <CardComponent title="Ver série de exercícios" ajust={'170px'} ajustDesktop={'240px'} {...{action: handleOpenExerciseModal}} />
                         </Grid>
                     </Grid>
                 </Box>
             )}
             
-            <Modal {...{setShow, show, onClick: handleAcceptTerm, buttonLabel: "Aceitar", modalTitle: "Termo de responsabilidade"}}>
-                {termContent}
+            <Modal {...{setShow, show, onClick: handleAcceptTerm, buttonLabel: "Aceitar", modalTitle: termContent.titulo}}>
+                <div
+                    dangerouslySetInnerHTML={{__html: termContent?.conteudo?.html}}
+                />
             </Modal>
 
-            <ExercisesModal {...{userData, setShow: setShowExercises, show: showExercises, handleCloseModal, handleOpenExercise, buttonLabel: "Começar", modalTitle: "Lista de grupo exercícios"}}/>
+            <Modal {...{setShow: setShowCheat, show: showInformation, onClick: () => setShowInformation(false), buttonLabel: "Fechar", modalTitle: informationContent?.titulo, width: 80}}>
+                <div
+                    dangerouslySetInnerHTML={{__html: informationContent?.textoDaInformacao?.html}}
+                />
+            </Modal>
+
+            <Modal {...{setShow: setShowCheat, show: showCheat, onClick: () => setShowCheat(false), buttonLabel: "Fechar", modalTitle: 'Dicas', width: 80}}>
+                
+                <Box width={"100%"} display={"flex"} gridGap={"16px"} pb={"16px"}>
+                    <Button variant="outlined" color="primary" onClick={() => handleGetCheat("postura")}>
+                        Melhor postura
+                    </Button>
+
+                    <Button variant="outlined" color="primary" onClick={() => handleGetCheat("computador")}>
+                        Postura correta ao sentar em frente ao computador
+                    </Button>
+
+                    <Button variant="outlined" color="primary" onClick={() => handleGetCheat("ergonomia")}>
+                        Ergonomia
+                    </Button>
+                </Box>
+
+                {cheatContent?.textoDaDica && (
+                    <Box width={"100%"}>
+                        <Card>
+                            <CardContent>
+                                <div
+                                    dangerouslySetInnerHTML={{__html: cheatContent?.textoDaDica?.html}}
+                                />
+                            </CardContent>
+                        </Card>
+                    </Box>
+                )}
+                
+            </Modal>
+
+            <ExercisesModal {...{userData, setShow: setShowExercises, show: showExercises, handleCloseModal, handleOpenExercise, buttonLabel: "Começar série", modalTitle: "Lista de grupo de exercícios"}}/>
         </Container>
     )
 }

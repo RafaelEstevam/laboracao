@@ -30,8 +30,17 @@ const ExerciseHook = () => {
         setShow(false);
     };
 
+    const handleFinishExercises = () => {
+        handleClose();
+        API.get(`/users/${_id}/finish-exercises`).then((response) => {
+            history.push(`/dashboard`);
+        }).catch((e) => {
+            console.log(e)
+        })
+    }
+
     const handleGetCheat = () => {
-        API.get('/cheats').then((response) => {
+        API.get('/cheats/geral').then((response) => {
             const {data} = response;
             let number = parseInt(((Math.random() * (data.cheats.length))));
             setCheat(data.cheats[number])
@@ -146,7 +155,8 @@ const ExerciseHook = () => {
         show,
         setShow,
         handleClose,
-        cheat
+        cheat,
+        handleFinishExercises
     }
 };
 

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import img1 from '../assets/1.png';
 import img2 from '../assets/2.png';
 import img3 from '../assets/3.png';
+import img4 from '../assets/4.png';
 
 const CustomCard = styled(Card)`
     border-radius: 12px !important;
@@ -32,17 +33,33 @@ const CardTitle = styled(Typography)`
     // position: absolute;
 `
 
-const Bg = ({img, ajust}) => {
+const CustomImg = styled('img')`
+    
+    height: auto;
+    position: absolute;
+    right: 0px;
+    margin-top: ${(props) => props.ajust && props.ajust};
+
+    @media(min-width: 960px){
+        width: 100%;
+        height: auto;
+        min-height: 100%;
+        margin-top: inherit;
+        margin-top: ${(props) => props.ajustDesktop && props.ajustDesktop};
+    }
+`
+
+const Bg = ({img, ajust, ajustDesktop}) => {
     return (
         <>
-            <img src={img} alt="img" style={{width: '100%', height: 'auto', position: 'absolute', right: '0px'}} />
+            <CustomImg src={img} alt="img" ajust={ajust} ajustDesktop={ajustDesktop} />
         </>
     )
 }
 
-const CardComponent = ({title, bg, ajust, action}) => {
+const CardComponent = ({title, bg, ajust, action, ajustDesktop}) => {
 
-    const img = bg === 1 ? img1 : bg === 2 ? img2 : img3;
+    const img = bg === 1 ? img1 : bg === 2 ? img2 : bg === 3 ? img3 : img4;
 
     return (
         <CustomCard bg={img} onClick={action && action}>
@@ -51,7 +68,7 @@ const CardComponent = ({title, bg, ajust, action}) => {
                     {title}
                 </CardTitle>
             </Box>
-            <Bg {...{img, ajust}}/>
+            <Bg {...{img, ajust, ajustDesktop}}/>
         </CustomCard>
     )
 };

@@ -3,19 +3,58 @@ const { request, gql } = require('graphql-request');
 
 const graphqlAPI = 'https://api-sa-east-1.graphcms.com/v2/cl514trr41c2c01ugbhr85p1h/master';
 
-const searchCheats = async () => {
+const searchCheats = async (type) => {
     const query = gql` query MyQuery{
-        dica {
-            id,
+        dica(where: {
+            tipoDeDica: ${type}
+        }) {
+            id
             titulo,
             textoDaDica{
-                html
+            html
             }
         }
     }`;
 
     const {dica} = await request(graphqlAPI, query);
     return {cheats: dica};
+}
+
+const searchInformation = async () => {
+    const query = gql` query MyQuery{
+        informacao {
+            id
+            titulo,
+            textoDaInformacao{
+                html
+            }
+        }
+    }`;
+
+    const {informacao} = await request(graphqlAPI, query);
+    return {information: informacao};
+}
+
+const searchTerm = async () => {
+    const query = gql` query MyQuery{
+        termos{
+            id,
+            titulo,
+            conteudo{
+                    html
+            }
+        },
+        informacao {
+            id
+            titulo,
+            textoDaInformacao{
+                    html
+            }
+        },
+    }`;
+
+    const {termos, informacao} = await request(graphqlAPI, query);
+    return {term: termos, information: informacao};
 }
 
 const searchExercises = async () => {
@@ -129,12 +168,29 @@ module.exports = {
             allExercises = [...allExercises, ...generateListExercises(legsAndFeet > exerciciosPernas.length ? exerciciosPernas.length : legsAndFeet, exerciciosPernas)]
         };
 
-        return res.json({exercises: allExercises});
+        if(allExercises.length > 0){
+            return res.json({exercises: allExercises});
+
+        }else{
+            return res.status(400).json({exercises: allExercises});
+        }
+
         // return res.json(exercises);
     },
 
     async getCheats(req, res) {
-        const {cheats} = await searchCheats();
+        const {type} = req.params
+        const {cheats} = await searchCheats(type);
         return res.json({cheats});
+    },
+
+    async getTerm(req, res) {
+        const {term, information} = await searchTerm();
+        return res.json({term, information})
+    },
+
+    async getInformation(req, res) {
+        const {information} = await searchInformation();
+        return res.json({information})
     }
 }

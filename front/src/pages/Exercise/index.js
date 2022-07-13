@@ -79,7 +79,8 @@ export default function SignUp() {
     setShow,
     show,
     handleClose,
-    cheat
+    cheat,
+    handleFinishExercises
   } = ExerciseHook();
 
   return (
@@ -136,7 +137,7 @@ export default function SignUp() {
             </Grid>
         </div>
 
-        <Modal {...{setShow, show, onClick: handleClose, buttonLabel: "Ok, finalizar série", modalTitle: "Fim da série"}}>
+        <Modal {...{setShow, show, onClick: handleFinishExercises, buttonLabel: "Ok, finalizar série", modalTitle: "Fim da série"}}>
           <Box width={"100%"}>
             <Card>
               <CardContent>

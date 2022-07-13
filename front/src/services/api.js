@@ -1,4 +1,36 @@
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import React from 'react';
+import { CircularProgress } from '@material-ui/core';
+import styled from 'styled-components';
+import {useSnackbar} from 'notistack';
+
+const LoadingWrapper = styled('div')`
+  display: block;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  z-index: 11000000;
+  top: 0px;
+  left: 0px;
+  background: rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+`
+
+const InterceptorHooks = () => {
+
+  const dispatch = useDispatch();
+  const handleLoadingDispatch = (loading) => {
+    dispatch({ type: 'SET_LOADING', loading });
+  }
+  
+  return {
+    handleLoadingDispatch,
+  }
+}
 
 const API = axios.create({
   // baseURL: process.env.REACT_APP_API,
@@ -10,11 +42,36 @@ const API = axios.create({
   },
 });
 
-// API.interceptors.request.use(function (config) {
-//   const token = sessionStorage.getItem("token");
-//   config.headers.Authorization = token;
+const LoadingComponent = ({loading}) => {
+
+  const {handleLoadingDispatch} = InterceptorHooks();
+  const {enqueueSnackbar} = useSnackbar();
+
+  API.interceptors.request.use((config) => {
+    handleLoadingDispatch(true);
+    return config;
+  });
+
+  API.interceptors.response.use((config) => {
+    handleLoadingDispatch(false);
+    return config;
+  }, (error) => {
+    handleLoadingDispatch(false);
+    enqueueSnackbar("Houve um erro inesperado, tente novamente em instantes.", {variant: "error"})
+    return Promise.reject(error);
+  })
+
+  return loading && (
+    <LoadingWrapper>
+      <CircularProgress color="primary"></CircularProgress>
+    </LoadingWrapper>
+  )
+}
+
+// API.interceptors.response.use(function(config){
+//   console.log("response");
 //   return config;
-// });
+// })
 
 const setTokenInStorage = (token) => {
   sessionStorage.setItem("token", token);
@@ -64,4 +121,4 @@ function resetStorage() {
   sessionStorage.removeItem("id");
 }
 
-export { API, setTokenInStorage, getTokenInStorage, decodeToken, resetStorage, setIdInStorage, getUserIdInStorage, setUserDataInStorage, getUserDataInStorage };
+export { API, LoadingComponent, setTokenInStorage, getTokenInStorage, decodeToken, resetStorage, setIdInStorage, getUserIdInStorage, setUserDataInStorage, getUserDataInStorage };

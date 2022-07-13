@@ -7,10 +7,14 @@ const DashboardHook = () => {
     const history = useHistory();
     const {term_accept, _id} = getUserDataInStorage();
     const [show, setShow] = useState(null);
+    const [showCheat, setShowCheat] = useState(null);
     const [termContent, setTermContent] = useState('');
     const [showExercises, setShowExercises] = useState(null);
     const [term, setTerm] = useState(null);
     const [userData, setUserData] = useState({});
+    const [showInformation, setShowInformation] = useState(null);
+    const [informationContent, setInformationContent] = useState({});
+    const [cheatContent, setCheatContent] = useState({});
 
     const handleAcceptTerm = async () => {
         const data = {term_accept: true};
@@ -23,6 +27,25 @@ const DashboardHook = () => {
         })
     };
 
+    const handleGetTerm = async () => {
+        await API.get('/term').then((response) => {
+            const {data} = response;
+            setTermContent(data.term[0]);
+            setInformationContent(data.information[0]);
+        }).catch((e) => {
+            console.log(e);
+        })
+    }
+
+    const handleGetCheat = async (cheat) => {
+        await API.get(`/cheats/${cheat}`).then((response) => {
+            const {data} = response;
+            setCheatContent(data.cheats[0]);
+        }).catch((e) => {
+            console.log(e);
+        })
+    }
+
     const handleOpenExerciseModal = () => {
         setShowExercises(true);
     };
@@ -30,10 +53,6 @@ const DashboardHook = () => {
     const handleCloseModal = () => {
         setShowExercises(false);
     };
-
-    useEffect(() => {
-        setTerm(term_accept);
-    }, []);
 
     useEffect(() => {
         if(term === false){
@@ -49,6 +68,11 @@ const DashboardHook = () => {
         });
     }, [_id]);
 
+    useEffect(() => {
+        handleGetTerm();
+        setTerm(term_accept);
+    }, []);
+
 
 
     return {
@@ -62,7 +86,15 @@ const DashboardHook = () => {
         history,
         showExercises,
         setShowExercises,
-        termContent
+        termContent,
+        showCheat,
+        setShowCheat,
+        showInformation,
+        setShowInformation,
+        informationContent,
+        setInformationContent,
+        handleGetCheat,
+        cheatContent
     }
 };
 

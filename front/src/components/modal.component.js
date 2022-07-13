@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {COLORS} from '../styles/colors';
-import {Typography, Button} from '@material-ui/core';
+import {Typography, Button, Box, Card, CardContent} from '@material-ui/core';
 
 const AchievementsModal = styled('div')`
     display: block;
@@ -19,7 +19,7 @@ const AchievementsModal = styled('div')`
 `;
 
 const AchievementsModalWrapper = styled('div')`
-    width: 50%;
+    width: ${(props) => props.width || '50'}%;
     min-height: 300px;
     margin: auto;
     border-radius: 20px;
@@ -34,9 +34,11 @@ const ModalTitle = styled('div')`
 `;
 
 const ModalBody = styled('div')`
-    display: flex;
-    justify-content: flex-start;
-    padding-bottom: 20px;
+    // display: flex;
+    // justify-content: flex-start;
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-bottom: 20px;
 `
 
 const ModalTitleLabel = styled(Typography)`
@@ -49,17 +51,26 @@ const ModalActions = styled('div')`
     justify-content: space-between;
 `
 
-const ModalComponent = ({show, setShow, onClick, buttonLabel, modalTitle, children, onClose}) => {
+const ModalComponent = ({show, setShow, onClick, buttonLabel, modalTitle, children, onClose, width}) => {
     return show && (
         <AchievementsModal>
-            <AchievementsModalWrapper className='main-background'>
+            <AchievementsModalWrapper className='main-background' {...{width}}>
                 <div>
                     <ModalTitle>
                         <ModalTitleLabel className="main-text">{modalTitle}</ModalTitleLabel>
                     </ModalTitle>
-                    <ModalBody>
-                        {children}
-                    </ModalBody>
+                    {children && (
+                        <ModalBody>
+                            <Box width={"100%"}>
+                                <Card>
+                                    <CardContent>
+                                        {children}
+                                    </CardContent>
+                                </Card>
+                            </Box>
+                            
+                        </ModalBody>
+                    )}
                 </div>
                 <ModalActions>
                     {onClose && (

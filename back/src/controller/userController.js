@@ -153,5 +153,20 @@ module.exports = {
         if (user) {
             await User.findByIdAndUpdate(user_id, { connection_id });
         }
+    },
+
+    async finishExercises(req, res){
+        const { id } = req.params;
+        const exercises = [];
+
+        let user = await User.findById(id);
+
+        if (user) {
+            await User.findByIdAndUpdate(id, {exercises});
+            const updatedUser = await User.findById(id);
+            return res.send(updatedUser);
+        } else {
+            return res.send("Usuário não encontrado");
+        }
     }
 }

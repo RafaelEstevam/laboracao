@@ -5,12 +5,16 @@ import GlobalStyle from './styles/global';
 import { createTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
+import { useSelector } from 'react-redux';
+
 import {COLORS} from './styles/colors';
 
 import AllRoutes from './routes';
 import history from './services/history';
 
 import DefaultContext from './stores/defaultContext';
+
+import {LoadingComponent} from './services/api';
 
 const theme = createTheme({
   palette: {
@@ -51,14 +55,17 @@ function App() {
 
   const [defaultContext, setDefaultContext] = useState({});
 
+  const loading = useSelector(state => state.load);
+
   return (
     <DefaultContext.Provider value={defaultContext}>
-      <ThemeProvider theme={theme}>
-        <Router history={history}>
-          <AllRoutes />
-          <GlobalStyle />
-        </Router>
-      </ThemeProvider>
+      <LoadingComponent {...{loading}} />
+        <ThemeProvider theme={theme}>
+          <Router history={history}>
+            <AllRoutes />
+            <GlobalStyle />
+          </Router>
+        </ThemeProvider>
     </DefaultContext.Provider>
     
   );

@@ -7,20 +7,17 @@ const ExercisesModal = ({setShow, show, handleCloseModal, handleOpenExercise, bu
     return (
         <Modal {...{setShow, show, onClick: handleOpenExercise, buttonLabel, modalTitle, onClose: handleCloseModal}}>
             {userData?.exercises?.map((item) => (
-                <Box pr={2} key={item.exercise}>
+                <Box pb={2} key={item?.nomeDoExercicio} width={'100%'}>
                     <Card>
                         <CardContent>
                             <Box>
                                 <Typography variant="h5">
                                     {item.nomeDoExercicio}
                                 </Typography>
-                                {/* <Typography>
-                                    Nº repetições: <b>{item.repeticoesMaximas}</b>
-                                </Typography> */}
                             </Box>
-                            <Box display={'flex'} style={{gap: '8px'}}>
+                            <Box display={'flex'} style={{gap: '8px', flexFlow: 'wrap'}}>
                                 {item.exercises.map((subitem) => (
-                                    <Box pt={2} key={subitem.title}>
+                                    <Box pt={2} key={subitem?.title}>
                                         <Card>
                                             <CardContent>
                                                 <Typography>
